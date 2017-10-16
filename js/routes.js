@@ -21,11 +21,23 @@ Database interaction routes
 ****************************************************************/
 
 /***
-  * Create a user entry in the database and return the user id
+  * Fetch all relationship events
   *
   */
 exports.getRelationshipsData = function(req, res) {
   promisifiedReadFile('./data/relationshipEvents.json')
+  .then(function(data){
+    res.send(data);
+  })
+  .catch(console.error.bind(this));
+}
+
+/***
+  * Fetch characters
+  *
+  */
+exports.getCharactersData = function(req, res) {
+  promisifiedReadFile('./data/characters.json')
   .then(function(data){
     res.send(data);
   })

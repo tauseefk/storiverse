@@ -1,14 +1,62 @@
 [
   {
-    "id": 5,
-    "characterIds": [],
-    "relationshipType": 1,
-    "strength": ,
+    "id": 45,
+    "characterIds": [1, 2],
+    "relationshipType": 7,
+    "strength": 1,
+    "isVisible": true,
     "videoClips": [
       {
-        "episodeId": 1,
-        "startTime": 1,
-        "endTime": 1
+        "episodeId": 4,
+        "startTime": 74,
+        "endTime": 108
+      },
+      {
+        "episodeId": 4,
+        "startTime": 188,
+        "endTime": 300
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "characterIds": [1, 2],
+    "relationshipType": 3,
+    "strength": 3,
+    "isVisible": true,
+    "videoClips": [
+      {
+        "episodeId": 4,
+        "startTime": 350,
+        "endTime": 422
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "characterIds": [1, 3],
+    "relationshipType": 2,
+    "strength": 2,
+    "isVisible": true,
+    "videoClips": [
+      {
+        "episodeId": 4,
+        "startTime": 0,
+        "endTime": 72
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "characterIds": [1, 3],
+    "relationshipType": 7,
+    "strength": 5,
+    "isVisible": true,
+    "videoClips": [
+      {
+        "episodeId": 4,
+        "startTime": 430,
+        "endTime": 603
       }
     ]
   }
