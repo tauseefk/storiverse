@@ -1,14 +1,15 @@
 [
-    {
-        "id": 5,
-        "characterIds": [],
-        "relationshipType": 1,
-        "videoClips": [
-            {
-                "episodeId": 1,
-                "startTime": 1,
-                "endTime": 1
-            }
-        ]
-    }
+  {
+    "id": 5,
+    "characterIds": [],
+    "relationshipType": 1,
+    "strength": ,
+    "videoClips": [
+      {
+        "episodeId": 1,
+        "startTime": 1,
+        "endTime": 1
+      }
+    ]
+  }
 ]

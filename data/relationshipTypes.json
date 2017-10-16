@@ -1,11 +1,11 @@
 {
-    "1": "BFF",
-    "2": "Dating",
-    "3": "Hooking up",
-    "4": "Married",
-    "5": "Friend",
-    "6": "Family",
-    "6": "Broken up",
-    "6": "Unknown",
-    "6": "Engaged"
+  "1": "BFF",
+  "2": "Dating",
+  "3": "Hooking up",
+  "4": "Married",
+  "5": "Friend",
+  "6": "Family",
+  "7": "Broken up",
+  "8": "Unknown",
+  "9": "Engaged"
 }

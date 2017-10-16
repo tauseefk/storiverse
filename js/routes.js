@@ -1,7 +1,20 @@
 'use strict';
 
 // var userActionsModel = require('./Models/userActionsModel.js');
-var fs = require('fs');
+var fs = require('fs'),
+  encoding = 'utf8';
+
+function promisifiedReadFile(url, enc = encoding) {
+  return new Promise(function(resolve, reject) {
+    fs.readFile(url, enc, function(err, data) {
+      if(!err) {
+        resolve(data);
+      } else {
+        reject(err);
+      }
+    })
+  });
+}
 
 /***************************************************************
 Database interaction routes
@@ -12,11 +25,9 @@ Database interaction routes
   *
   */
 exports.getRelationshipsData = function(req, res) {
-  fs.readFile('./data/relationshipEvents.json', 'utf8', function(err, relationships) {
-      if(!err) {
-          res.send(JSON.parse(relationships));
-      } else {
-          throw err;
-      }
+  promisifiedReadFile('./data/relationshipEvents.json')
+  .then(function(data){
+    res.send(data);
   })
+  .catch(console.error.bind(this));
 }

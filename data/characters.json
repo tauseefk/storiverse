@@ -1,12 +1,12 @@
 [
-    {
-        "id": ,
-        "name": ,
-        "gender": ,
-        "location": ,
-        "relationshipEvents": [],
-        "currentStatus": ,
-        "img": ,
-        "labels":
-    }
+  {
+    "id": ,
+    "name": ,
+    "gender": ,
+    "location": ,
+    "relationshipEventIds": [],
+    "currentStatus": ,
+    "img": ,
+    "labels":
+  }
 ]
