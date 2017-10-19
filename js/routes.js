@@ -43,3 +43,15 @@ exports.getCharactersData = function(req, res) {
   })
   .catch(console.error.bind(this));
 }
+
+/***
+  * Create a user entry in the database and return the user id
+  *
+  */
+exports.createUser = function(req, res) {
+  userActionsModel.addUserToDatabase()
+  .then(function(response) {
+    res.send(JSON.stringify(response));
+  })
+  .catch(console.error.bind(this));
+}
