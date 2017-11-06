@@ -212,7 +212,6 @@ function getUserActionsTable() {
 module.exports = {
   addDummyData: addDummyData,
   getUserActionsByUserId: getUserActionsByUserId,
-  updateUserInfoById: updateUserInfoById,
   addUserActionForUserId: addUserAction,
   getUserActionsTable: getUserActionsTable,
   addUserToDatabase: addUserToDatabase

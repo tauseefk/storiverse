@@ -2,7 +2,9 @@
 
 // var userActionsModel = require('./Models/userActionsModel.js');
 var fs = require('fs'),
-  encoding = 'utf8';
+  encoding = 'utf8',
+  userActionsModel = require('./Models/userActionsModel.js'),
+  commentFile = './data/comments.json';
 
 function promisifiedReadFile(url, enc = encoding) {
   return new Promise(function(resolve, reject) {
@@ -12,7 +14,19 @@ function promisifiedReadFile(url, enc = encoding) {
       } else {
         reject(err);
       }
-    })
+    });
+  });
+}
+
+function promisifiedWriteFile(url, content) {
+  return new Promise(function(resolve, reject) {
+    fs.writeFile(url, content, function(err) {
+      if(!err) {
+        resolve("Successfully written to file.");
+      } else {
+        reject(err);
+      }
+    });
   });
 }
 
@@ -55,3 +69,38 @@ exports.createUser = function(req, res) {
   })
   .catch(console.error.bind(this));
 }
+
+/**
+ * fetch item for an episode
+ *
+ */
+exports.fetchItemForEpisode = function(req, res) {
+  promisifiedReadFile('./data/items.json')
+  .then(function(data) {
+    return data.filter(function(item){
+      return item.episodeId == req.data.episodeId;
+    })
+  })
+  .then(function(items) {
+    var itemIdx = Math.random() * (2 - 0) + 0;
+    res.send(JSON.stringify(items[itemIdx]));
+  })
+  .catch(console.error.bind(this));
+}
+
+/**
+ * Post comments for an item
+ *
+ */
+ exports.postCommentForItemId = function(req, res) {
+   promisifiedWriteFile(commentFile, req.data.content)
+   .then(function(data) {
+     res.send(JSON.stringify(data));
+   })
+   .catch(console.error.bind(this));
+ }
+
+ /**
+  * Fetch comments for episode box
+  *
+  */

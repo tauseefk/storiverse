@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "itemName": "rose",
+    "episodeId": 4,
+    "text": "Have you ever been given a present because you were mad at your s/o?",
+    "options": [
+      "Yes",
+      "No"
+    ]
+  },
+  {
+    "id": 2,
+    "episodeId": 4,
+    "itemName": "wine",
+    "text": "Have you ever cheated on someone?",
+    "options": [
+      "Yes",
+      "No"
+    ]
+  }
+]
