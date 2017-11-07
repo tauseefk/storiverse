@@ -58,6 +58,18 @@ exports.getCharactersData = function(req, res) {
   .catch(console.error.bind(this));
 }
 
+
+/***
+  * Fetch characters
+  *
+  */
+exports.getCharacterConnections(req, res) {
+  promisifiedReadFile('./data/characters.json')
+  .then(function(data) {
+    
+  })
+}
+
 /***
   * Create a user entry in the database and return the user id
   *
