@@ -1,9 +1,9 @@
 'use strict';
 
-// var userActionsModel = require('./Models/userActionsModel.js');
 var fs = require('fs'),
   encoding = 'utf8',
   userActionsModel = require('./Models/userActionsModel.js'),
+  characterDataModel = require('./Models/characterDataModel.js'),
   commentFile = './data/comments.json';
 
 function promisifiedReadFile(url, enc = encoding) {
@@ -39,7 +39,7 @@ Database interaction routes
   *
   */
 exports.getRelationshipsData = function(req, res) {
-  promisifiedReadFile('./data/relationshipEvents.json')
+  characterDataModel.getCharacterCollection()
   .then(function(data){
     res.send(data);
   })
@@ -51,23 +51,69 @@ exports.getRelationshipsData = function(req, res) {
   *
   */
 exports.getCharactersData = function(req, res) {
-  promisifiedReadFile('./data/characters.json')
-  .then(function(data){
-    res.send(data);
+  characterDataModel.getCharacterCollection()
+  .then(function(collection){
+    collection.find({})
+    .toArray(function(err, items) {
+      if(err) {
+        res.send(err);
+      } else {
+        res.send(items);
+      }
+    })
   })
   .catch(console.error.bind(this));
 }
 
+/***
+  * Fetch character by name
+  *
+  */
+exports.getCharacterByName = function(req, res) {
+  characterDataModel.getCharacterCollection()
+  .then(function(collection){
+    collection.find({
+      name: req.query.characterName
+    })
+    .toArray(function(err, items) {
+      if(err) {
+        res.send(err);
+      } else {
+        res.send(items);
+      }
+    })
+  })
+  .catch(console.error.bind(this));
+}
+
+/***
+  * Fetch character by id
+  *
+  */
+exports.getCharacterById = function(req, res) {
+  characterDataModel.getCharacterCollection()
+  .then(function(collection){
+    collection.find({
+      id: parseInt(req.query.id)
+    })
+    .toArray(function(err, items) {
+      if(err) {
+        res.send(err);
+      } else {
+        res.send(items);
+      }
+    })
+  })
+  .catch(console.error.bind(this));
+}
 
 /***
   * Fetch characters
   *
   */
-exports.getCharacterConnections(req, res) {
+exports.getCharacterConnections = function(req, res) {
   promisifiedReadFile('./data/characters.json')
-  .then(function(data) {
-    
-  })
+  .then()
 }
 
 /***
@@ -100,19 +146,47 @@ exports.fetchItemForEpisode = function(req, res) {
   .catch(console.error.bind(this));
 }
 
-/**
- * Post comments for an item
- *
- */
- exports.postCommentForItemId = function(req, res) {
-   promisifiedWriteFile(commentFile, req.data.content)
-   .then(function(data) {
-     res.send(JSON.stringify(data));
-   })
-   .catch(console.error.bind(this));
- }
-
- /**
-  * Fetch comments for episode box
+/***
+  * Post comments for an item
   *
   */
+exports.postCommentForItemId = function(req, res) {
+  promisifiedWriteFile(commentFile, req.data.content)
+  .then(function(data) {
+    res.send(JSON.stringify(data));
+  })
+  .catch(console.error.bind(this));
+}
+
+/***
+  * Add user action to the user in the database
+  *
+  */
+exports.postCommentForItemId2 = function(req, res) {
+  var comment = {
+    sceneName: req.body.sceneName,
+    interactionType: req.body.interactionType
+  }
+  userActionsModel.addCommentForUserId(req.body.userId, req.body.itemId, userAction);
+  res.send("Comment posted");
+}
+
+/***
+  * Add user action to the user in the database
+  *
+  */
+exports.getRelationshipsData = function(req, res) {
+  characterDataModel
+  .fetchRelationshipsForCharacter(req.body.characterId, req.body.relDegree);
+  res.send("Comment posted");
+}
+
+exports.createCharacterCollection = function(req, res) {
+  characterDataModel.createCharacterCollection();
+  res.send("collection made");
+}
+
+exports.addDummyData = function(req, res) {
+  characterDataModel.addDummyData();
+  res.send("dummy data added!")
+}
