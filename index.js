@@ -17,6 +17,7 @@ app.get('/getCharacterByName', Routes.getCharacterByName);
 app.get('/createUser', Routes.createUser);
 app.get('/addDummyData', Routes.addDummyData);
 app.get('/createCharacterCollection', Routes.createCharacterCollection);
+app.get('/getCharacterRelationships', Routes.getCharacterRelationships);
 
 app.listen(app.get('port'), function() {
   console.log(`Node app is running on port: ${app.get('port')}`);

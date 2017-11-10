@@ -6,7 +6,8 @@
     "location": "Los Angeles",
     "currentStatus": "Dating",
     "img": "",
-    "labels": [""]
+    "labels": [""],
+    "relationships": [2, 3]
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "location": "Los Angeles",
     "currentStatus": "Single",
     "img": "",
-    "labels": [""]
+    "labels": [""],
+    "relationships": [1]
   },
   {
     "id": 3,
@@ -24,6 +26,7 @@
     "location": "Los Angeles",
     "currentStatus": "Dating",
     "img": "",
-    "labels": [""]
+    "labels": [""],
+    "relationships": [1]
   }
 ]

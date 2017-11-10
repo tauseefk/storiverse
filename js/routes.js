@@ -6,6 +6,21 @@ var fs = require('fs'),
   characterDataModel = require('./Models/characterDataModel.js'),
   commentFile = './data/comments.json';
 
+/***
+  * Utility to flatten multi dimensional array by one dimension.
+  *
+  */
+Array.prototype.concatAll = function() {
+  var results = [];
+  this.forEach(function(subArray) {
+    if (Array.isArray(subArray))
+      subArray.forEach((item) => results.push(item))
+    else
+      throw new Error('Its not two dimensional array;');
+  });
+  return results;
+};
+
 function promisifiedReadFile(url, enc = encoding) {
   return new Promise(function(resolve, reject) {
     fs.readFile(url, enc, function(err, data) {
@@ -27,6 +42,19 @@ function promisifiedWriteFile(url, content) {
         reject(err);
       }
     });
+  });
+}
+
+function collectionToArray(collection) {
+  return new Promise(function (resolve, reject) {
+    collection.find({})
+    .toArray(function(err, items) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(items);
+      }
+    })
   });
 }
 
@@ -91,29 +119,43 @@ exports.getCharacterByName = function(req, res) {
   *
   */
 exports.getCharacterById = function(req, res) {
-  characterDataModel.getCharacterCollection()
-  .then(function(collection){
-    collection.find({
-      id: parseInt(req.query.id)
-    })
-    .toArray(function(err, items) {
-      if(err) {
-        res.send(err);
-      } else {
-        res.send(items);
-      }
-    })
+  characterDataModel.getCharacterById(parseInt(req.query.id))
+  .then(function(characters) {
+    res.send(characters);
   })
-  .catch(console.error.bind(this));
+  .catch(function(e) {
+    res.send(e);
+  });
 }
 
-/***
-  * Fetch characters
-  *
-  */
-exports.getCharacterConnections = function(req, res) {
-  promisifiedReadFile('./data/characters.json')
-  .then()
+exports.getCharacterRelationships = function(req, res) {
+  var tempCharacters;
+  var finalCharacterSet = new Set();
+  characterDataModel.getCharacterCollection()
+  .then(collectionToArray)
+  .then(function(characters) {
+    tempCharacters = characters;
+    return characters.filter(function(character) {
+      return character.id == req.query.id;
+    })
+  })
+  .then(function(filteredChars) {
+    return filteredChars[0];
+  })
+  .then(function(char) {
+    char.relationships.forEach(function(charId) {
+      tempCharacters.filter(function(character) {
+        return character.id == charId;
+      })
+      .forEach(function(char) {
+        finalCharacterSet.add(char);
+      });
+    })
+  })
+  .then(function() {
+    res.send(Array.from(finalCharacterSet));
+  })
+  .catch(console.error.bind(this));
 }
 
 /***

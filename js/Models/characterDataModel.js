@@ -11,17 +11,17 @@ var databaseConnection = require('./databaseConnection.js'),
 /***************************************************************
 Utils
 ****************************************************************/
-function log(x) {
+function log (x) {
   console.log(x);
   return x;
 }
 
-function logError(x) {
+function logError (x) {
   console.error(x);
   return x;
 }
 
-function promisifiedReadFile(url, enc) {
+function promisifiedReadFile (url, enc) {
   return new Promise(function(resolve, reject) {
     fs.readFile(url, enc, function(err, data) {
       if(!err) {
@@ -37,9 +37,9 @@ function promisifiedReadFile(url, enc) {
   * Adds dummy data to the collection for testing purposes.
   *
   */
-function addDummyData() {
-  return databaseConnection.connect()
-  .then(getCharacterData)
+function addDummyData () {
+  return Promise.resolve()
+  .then(getCharacterCollection)
   .then(function(collection) {
     promisifiedReadFile('./data/characters.json', 'utf8')
     .then(function(data) {
@@ -53,21 +53,13 @@ function addDummyData() {
   .catch(logError);
 }
 
-function createCharacterCollection() {
-  return databaseConnection.connect()
-  .then(function(db) {
-    return new Promise(function(resolve, reject){
-      try {
-        resolve(db.collection("characterData"));
-      } catch(e) {
-        console.log("table not found");
-        reject(db);
-      }
-    });
-  })
+function createCharacterCollection () {
+  return Promise.resolve()
+  .then(getCharacterCollection)
   .then(log)
-  .catch(function(db) {
-    console.log(db);
+  .catch(function(e) {
+    console.log(e);
+
     db.createCollection("characterData", {
       capped : true,
       size : 5242880,
@@ -87,7 +79,7 @@ CRUD Operations
   * @return anonymous fn that takes a DB connection and returns a collection
   *
   */
-function getCollectionByName(name) {
+function getCollectionByName (name) {
   return function(db) {
     return new Promise(function(resolve, reject) {
       try {
@@ -105,10 +97,9 @@ function getCollectionByName(name) {
   * @param userId: id of the userId
   *
   */
-function getRelationshipsByCharacterId(characterId) {
-  return databaseConnection.connect()
-  .then(getRelationshipCollection)
-  .then(function(collection) {
+function getCharacterById (characterId) {
+  return getCharacterCollection ()
+  .then(function(collection){
     return new Promise(function(resolve, reject) {
       collection.find({
         id: characterId
@@ -119,11 +110,9 @@ function getRelationshipsByCharacterId(characterId) {
         } else {
           resolve(items);
         }
-      });
-    });
+      })
+    })
   })
-  .then(log)
-  .catch(logError);
 }
 
 /***
@@ -132,7 +121,7 @@ function getRelationshipsByCharacterId(characterId) {
   * @param action: user action to be added
   *
   */
-function updateUserActionsByUserId(userId, action) {
+function updateUserActionsByUserId (userId, action) {
   return databaseConnection.connect()
   .then(getUserActions)
   .then(function(collection) {
@@ -162,7 +151,7 @@ function updateUserActionsByUserId(userId, action) {
   * @param action: user action containing name of the scene & interaction type.
   *
   */
-function addUserAction(userId, action) {
+function addUserAction (userId, action) {
   return databaseConnection.connect()
   .then(getUserActions)
   .then(function(collection) {
@@ -236,7 +225,7 @@ function addUserToFile () {
   * Fetches the whole user actions collection
   *
   */
-function getCharacterCollection() {
+function getCharacterCollection () {
   return databaseConnection.connect()
   .then(getCharacterData);
 }
@@ -246,5 +235,6 @@ module.exports = {
   addUserActionForUserId: addUserAction,
   addUserToDatabase: addUserToDatabase,
   createCharacterCollection: createCharacterCollection,
-  getCharacterCollection: getCharacterCollection
+  getCharacterCollection: getCharacterCollection,
+  getCharacterById: getCharacterById
 }

@@ -103,6 +103,6 @@ Graph.prototype.traverseDFS = function(vertex, fn) {
 
 Graph.prototype.print = function() {
   console.log(this.vertices.map(function(vertex) {
-    return (vertex + ' -> ' + this.edges.[vertex].join(', ')).trim();
+    return (vertex + ' -> ' + this.edges[vertex].join(', ')).trim();
   }, this).join(' | '));
 };
