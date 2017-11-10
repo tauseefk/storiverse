@@ -140,11 +140,8 @@ exports.getCharacterRelationships = function(req, res) {
       return character.id == req.query.id;
     })
   })
-  .then(function(filteredChars) {
-    return filteredChars[0];
-  })
   .then(function(char) {
-    char.relationships.forEach(function(charId) {
+    char[0].relationships.forEach(function(charId) {
       tempCharacters.filter(function(character) {
         return character.id == charId;
       })
