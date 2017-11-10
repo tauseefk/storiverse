@@ -128,6 +128,7 @@ exports.getCharacterById = function(req, res) {
   });
 }
 
+// TODO:XXX refactor, it looks like it can be better
 exports.getCharacterRelationships = function(req, res) {
   var tempCharacters;
   var finalCharacterSet = new Set();
