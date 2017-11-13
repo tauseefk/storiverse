@@ -21,7 +21,7 @@ function logError(x) {
 }
 
 /***
-  * Adds dummy data to the collection for testing purposes.
+  * Adds dummy data to the collection for testing.
   *
   */
 function addDummyData() {

@@ -10,13 +10,15 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/', express.static(__dirname));
 
-app.get('/getRelationships', Routes.getRelationshipsData);
-app.get('/getCharacters', Routes.getCharactersData);
+app.get('/getRelationships', Routes.getRelationshipData);
+app.get('/getCharacters', Routes.getCharacterData);
 app.get('/getCharacterById', Routes.getCharacterById);
 app.get('/getCharacterByName', Routes.getCharacterByName);
 app.get('/createUser', Routes.createUser);
 app.get('/addDummyData', Routes.addDummyData);
 app.get('/createCharacterCollection', Routes.createCharacterCollection);
+app.get('/addDummyRelationshipData', Routes.addDummyRelationshipData);
+app.get('/createRelationshipCollection', Routes.createRelationshipCollection);
 app.get('/getCharacterRelationships', Routes.getCharacterRelationships);
 
 app.listen(app.get('port'), function() {

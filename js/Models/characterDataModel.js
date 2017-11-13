@@ -6,6 +6,7 @@ Author: Md Tauseef
 var databaseConnection = require('./databaseConnection.js'),
   uuidV4 = require('uuid/v4'),
   getCharacterData = getCollectionByName('characterData'),
+  getRelationshipData = getCollectionByName('relationshipData'),
   fs = require('fs');
 
 /***************************************************************
@@ -53,6 +54,26 @@ function addDummyData () {
   .catch(logError);
 }
 
+/***
+  * Adds dummy data to the collection for testing purposes.
+  *
+  */
+function addDummyRelationshipData () {
+  return Promise.resolve()
+  .then(getRelationshipCollection)
+  .then(function(collection) {
+    promisifiedReadFile('./data/relationshipEvents.json', 'utf8')
+    .then(function(data) {
+      JSON.parse(data).forEach(function(character){
+        return collection.insertOne(character);
+      });
+    })
+    .then(log)
+    .catch(logError);
+  })
+  .catch(logError);
+}
+
 function createCharacterCollection () {
   return Promise.resolve()
   .then(getCharacterCollection)
@@ -61,6 +82,21 @@ function createCharacterCollection () {
     console.log(e);
 
     db.createCollection("characterData", {
+      capped : true,
+      size : 5242880,
+      max : 5000
+    });
+  });
+}
+
+function createRelationshipCollection () {
+  return Promise.resolve()
+  .then(getRelationshipCollection)
+  .then(log)
+  .catch(function(e) {
+    console.log(e);
+
+    db.createCollection("relationshipData", {
       capped : true,
       size : 5242880,
       max : 5000
@@ -222,7 +258,7 @@ function addUserToFile () {
 }
 
 /***
-  * Fetches the whole user actions collection
+  * Fetches the whole characters collection
   *
   */
 function getCharacterCollection () {
@@ -230,11 +266,23 @@ function getCharacterCollection () {
   .then(getCharacterData);
 }
 
+/***
+  * Fetches the whole relationships collection
+  *
+  */
+function getRelationshipCollection () {
+  return databaseConnection.connect()
+  .then(getRelationshipData);
+}
+
 module.exports = {
   addDummyData: addDummyData,
+  addDummyRelationshipData: addDummyRelationshipData,
   addUserActionForUserId: addUserAction,
   addUserToDatabase: addUserToDatabase,
   createCharacterCollection: createCharacterCollection,
+  createRelationshipCollection: createRelationshipCollection,
   getCharacterCollection: getCharacterCollection,
+  getRelationshipCollection: getRelationshipCollection,
   getCharacterById: getCharacterById
 }

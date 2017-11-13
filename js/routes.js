@@ -66,8 +66,9 @@ Database interaction routes
   * Fetch all relationship events
   *
   */
-exports.getRelationshipsData = function(req, res) {
-  characterDataModel.getCharacterCollection()
+function getRelationshipData (req, res) {
+  characterDataModel.getRelationshipCollection()
+  .then(collectionToArray)
   .then(function(data){
     res.send(data);
   })
@@ -78,17 +79,11 @@ exports.getRelationshipsData = function(req, res) {
   * Fetch characters
   *
   */
-exports.getCharactersData = function(req, res) {
+function getCharacterData (req, res) {
   characterDataModel.getCharacterCollection()
-  .then(function(collection){
-    collection.find({})
-    .toArray(function(err, items) {
-      if(err) {
-        res.send(err);
-      } else {
-        res.send(items);
-      }
-    })
+  .then(collectionToArray)
+  .then(function(data) {
+    res.send(data);
   })
   .catch(console.error.bind(this));
 }
@@ -97,7 +92,7 @@ exports.getCharactersData = function(req, res) {
   * Fetch character by name
   *
   */
-exports.getCharacterByName = function(req, res) {
+function getCharacterByName (req, res) {
   characterDataModel.getCharacterCollection()
   .then(function(collection){
     collection.find({
@@ -118,7 +113,7 @@ exports.getCharacterByName = function(req, res) {
   * Fetch character by id
   *
   */
-exports.getCharacterById = function(req, res) {
+function getCharacterById (req, res) {
   characterDataModel.getCharacterById(parseInt(req.query.id))
   .then(function(characters) {
     res.send(characters);
@@ -129,7 +124,7 @@ exports.getCharacterById = function(req, res) {
 }
 
 // TODO:XXX refactor, it looks like it can be better
-exports.getCharacterRelationships = function(req, res) {
+function getCharacterRelationships (req, res) {
   var tempCharacters;
   var finalCharacterSet = new Set();
   characterDataModel.getCharacterCollection()
@@ -160,7 +155,7 @@ exports.getCharacterRelationships = function(req, res) {
   * Create a user entry in the database and return the user id
   *
   */
-exports.createUser = function(req, res) {
+function createUser (req, res) {
   userActionsModel.addUserToDatabase()
   .then(function(response) {
     res.send(JSON.stringify(response));
@@ -172,7 +167,7 @@ exports.createUser = function(req, res) {
  * fetch item for an episode
  *
  */
-exports.fetchItemForEpisode = function(req, res) {
+function fetchItemForEpisode (req, res) {
   promisifiedReadFile('./data/items.json')
   .then(function(data) {
     return data.filter(function(item){
@@ -190,7 +185,7 @@ exports.fetchItemForEpisode = function(req, res) {
   * Post comments for an item
   *
   */
-exports.postCommentForItemId = function(req, res) {
+function postCommentForItemId (req, res) {
   promisifiedWriteFile(commentFile, req.data.content)
   .then(function(data) {
     res.send(JSON.stringify(data));
@@ -202,7 +197,7 @@ exports.postCommentForItemId = function(req, res) {
   * Add user action to the user in the database
   *
   */
-exports.postCommentForItemId2 = function(req, res) {
+function postCommentForItemId2 (req, res) {
   var comment = {
     sceneName: req.body.sceneName,
     interactionType: req.body.interactionType
@@ -211,22 +206,35 @@ exports.postCommentForItemId2 = function(req, res) {
   res.send("Comment posted");
 }
 
-/***
-  * Add user action to the user in the database
-  *
-  */
-exports.getRelationshipsData = function(req, res) {
-  characterDataModel
-  .fetchRelationshipsForCharacter(req.body.characterId, req.body.relDegree);
-  res.send("Comment posted");
-}
-
-exports.createCharacterCollection = function(req, res) {
+function createCharacterCollection (req, res) {
   characterDataModel.createCharacterCollection();
   res.send("collection made");
 }
 
-exports.addDummyData = function(req, res) {
+function addDummyData (req, res) {
   characterDataModel.addDummyData();
   res.send("dummy data added!")
+}
+
+function createRelationshipCollection (req, res) {
+  characterDataModel.createRelationshipCollection();
+  res.send("collection made");
+}
+
+function addDummyRelationshipData (req, res) {
+  characterDataModel.addDummyRelationshipData();
+  res.send("dummy data added!")
+}
+
+module.exports = {
+  getCharacterData: getCharacterData,
+  getRelationshipData: getRelationshipData,
+  getCharacterById: getCharacterById,
+  getCharacterByName: getCharacterByName,
+  createUser: createUser,
+  addDummyData: addDummyData,
+  createCharacterCollection: createCharacterCollection,
+  addDummyRelationshipData: addDummyRelationshipData,
+  createRelationshipCollection: createRelationshipCollection,
+  getCharacterRelationships: getCharacterRelationships
 }

@@ -54,13 +54,8 @@
     "videoClips": [
       {
         "episodeId": 1,
-        "startTime": ,
-        "endTime":
-      },
-      {
-        "episodeId": 1,
-        "startTime": ,
-        "endTime":
+        "startTime": 122,
+        "endTime": 150
       }
     ]
   }
