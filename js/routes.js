@@ -156,6 +156,10 @@ exports.getCharacterRelationships = function(req, res) {
   .catch(console.error.bind(this));
 }
 
+function getRelationshipsForCharacter(characterCollection, ) {
+
+}
+
 /***
   * Create a user entry in the database and return the user id
   *
