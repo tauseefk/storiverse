@@ -5,7 +5,7 @@ Author: Md Tauseef
 
 var databaseConnection = require('./databaseConnection.js');
 var uuidV4 = require('uuid/v4');
-var getUserActions = getCollectionByName('userActions');
+var getUserActions = getCollectionByName('userActionData');
 
 /***************************************************************
 Only for debugging
@@ -20,20 +20,37 @@ function logError(x) {
   return x;
 }
 
+function createUserActionCollection () {
+  return Promise.resolve()
+  .then(getUserActionCollection)
+  .then(log)
+  .catch(function(e) {
+    console.log(e);
+
+    db.createCollection("userActionData", {
+      capped : true,
+      size : 5242880,
+      max : 5000
+    });
+  });
+}
+
 /***
   * Adds dummy data to the collection for testing.
   *
   */
 function addDummyData() {
-  return databaseConnection.connect()
-  .then(getUserActions)
+  return getUserActionCollection()
   .then(function(collection) {
+    var timestamp = new Date().getTime();
     collection.insertOne( {
       id: uuidV4(),
       actions: [
         {
-          sceneName: "introScene",
-          interactionType: "positive"
+          timestamp: timestamp,
+          type: "question",
+          questionId: uuidV4(),
+          responseId: uuidV4()
         }
       ]
     })
@@ -74,8 +91,7 @@ function getCollectionByName(name) {
   *
   */
 function getUserActionsByUserId(userId) {
-  return databaseConnection.connect()
-  .then(getUserActions)
+  return getUserActionCollection()
   .then(function(collection) {
     return new Promise(function(resolve, reject) {
       collection.find({
@@ -95,27 +111,39 @@ function getUserActionsByUserId(userId) {
 }
 
 /***
-  * Update a particular user's actions in the database.
+  * Add user's response to a question in the database.
   * @param userId: id of the userId
-  * @param action: user action to be added
+  * @param questionId: id of the question
+  * @param responseId: id of the response
   *
   */
-function updateUserActionsByUserId(userId, action) {
-  return databaseConnection.connect()
-  .then(getUserActions)
+function addUserResponseByQuestionId(userId, questionId, responseId) {
+  return getUserActionCollection()
   .then(function(collection) {
     return new Promise(function(resolve, reject) {
       collection.update(
         { id: userId},
         {
-          $push: { actions: action }
+          $push: {
+            actions: {
+              timestamp: new Date().getTime(),
+              type: "question",
+              questionId: questionId,
+              responseId: responseId
+            }
+          }
         },
         {},
         function(err, result) {
           if(err) {
             reject(err);
           } else {
-            resolve(result);
+            if(data.result.nModified == 0) {
+              var writeError = new Error("Failed to update response!");
+              writeError.status = 500;
+              reject(writeError);
+            }
+            resolve(data);
           }
         }
       )
@@ -125,14 +153,47 @@ function updateUserActionsByUserId(userId, action) {
 }
 
 /***
+  * Update a particular user's response to a question in the database.
+  * @param userId: id of the userId
+  * @param questionId: id of the questions that has been updated
+  * @param action: user action to be added
+  *
+  */
+function updateUserResponseByQuestionId(userId, questionId, responseId) {
+  return getUserActionCollection()
+  .then(function(collection) {
+    return new Promise(function(resolve, reject) {
+      collection.update(
+        { id: userId, "actions.questionId": questionId},
+        {
+          $set: { "actions.$.responseId": responseId}
+        },
+        {},
+        function(err, data) {
+          if(err) {
+            reject(err);
+          } else {
+            if(data.result.nModified == 0) {
+              var writeError = new Error("Failed to update response!");
+              writeError.status = 500;
+              reject(writeError);
+            }
+            resolve(data);
+          }
+        }
+      )
+    });
+  });
+}
+
+/***
   * Adds new user action to existing user
   * @param userId: id of the user for adding user action.
   * @param action: user action containing name of the scene & interaction type.
   *
   */
 function addUserAction(userId, action) {
-  return databaseConnection.connect()
-  .then(getUserActions)
+  return getUserActionCollection()
   .then(function(collection) {
     return new Promise(function(resolve, reject) {
       collection.update(
@@ -160,31 +221,7 @@ function addUserAction(userId, action) {
   */
 function addUserToDatabase () {
   return new Promise(function(resolve, reject) {
-    databaseConnection.connect()
-    .then(getUserActions)
-    .then(function(collection) {
-      var generatedUserId = uuidV4();
-      try {
-        collection.insertOne({
-          id: generatedUserId,
-          actions: []
-        });
-      } catch(e) {
-        reject(e);
-      }
-      resolve(generatedUserId);
-    });
-  });
-}
-
-/***
-  * Adds a new user to the database and returns a UID for the user.
-  *
-  */
-function addUserToFile () {
-  return new Promise(function(resolve, reject) {
-    databaseConnection.connect()
-    .then(getUserActions)
+    getUserActionCollection()
     .then(function(collection) {
       var generatedUserId = uuidV4();
       try {
@@ -204,15 +241,16 @@ function addUserToFile () {
   * Fetches the whole user actions collection
   *
   */
-function getUserActionsTable() {
+function getUserActionCollection() {
   return databaseConnection.connect()
   .then(getUserActions);
 }
 
 module.exports = {
-  addDummyData: addDummyData,
-  getUserActionsByUserId: getUserActionsByUserId,
+  addDummyUserData: addDummyData,
+  addUserResponseByQuestionId: addUserResponseByQuestionId,
+  updateUserResponseByQuestionId: updateUserResponseByQuestionId,
   addUserActionForUserId: addUserAction,
-  getUserActionsTable: getUserActionsTable,
+  getUserActionCollection: getUserActionCollection,
   addUserToDatabase: addUserToDatabase
 }

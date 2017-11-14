@@ -89,6 +89,19 @@ function getCharacterData (req, res) {
 }
 
 /***
+  * Fetch user data
+  *
+  */
+function getUserData (req, res) {
+  userActionsModel.getUserActionCollection()
+  .then(collectionToArray)
+  .then(function(data) {
+    res.send(data);
+  })
+  .catch(console.error.bind(this));
+}
+
+/***
   * Fetch character by name
   *
   */
@@ -163,22 +176,52 @@ function createUser (req, res) {
   .catch(console.error.bind(this));
 }
 
-/**
- * fetch item for an episode
- *
- */
-function fetchItemForEpisode (req, res) {
-  promisifiedReadFile('./data/items.json')
+// TODO:XXX
+function addUserResponseByQuestionId (req, res, next) {
+  var requestObj = {
+    userId: req.body.id,
+    questionId: req.body.questionId,
+    responseId: req.body.responseId
+  }
+  userActionsModel.addUserResponseByQuestionId(
+    req.body.id,
+    req.body.questionId,
+    req.body.responseId
+  )
   .then(function(data) {
-    return data.filter(function(item){
-      return item.episodeId == req.data.episodeId;
-    })
+    res.send(data);
   })
-  .then(function(items) {
-    var itemIdx = Math.random() * (2 - 0) + 0;
-    res.send(JSON.stringify(items[itemIdx]));
+  .catch(function(e) {
+    next(e);
   })
-  .catch(console.error.bind(this));
+}
+
+// TODO:XXX
+function updateUserResponseByQuestionId (req, res, next) {
+  var requestObj = {
+    userId: req.body.id,
+    questionId: req.body.questionId,
+    responseId: req.body.responseId
+  }
+  userActionsModel.updateUserResponseByQuestionId(
+    req.body.id,
+    req.body.questionId,
+    req.body.responseId
+  )
+  .then(function(data) {
+    res.send(data);
+  })
+  .catch(function(e) {
+    next(e);
+  })
+}
+
+function addUserActionByUserId (req, res, next) {
+  res.send("blah");
+}
+
+function getScoreForUserId(req, res, next) {
+
 }
 
 /***
@@ -211,30 +254,51 @@ function createCharacterCollection (req, res) {
   res.send("collection made");
 }
 
-function addDummyData (req, res) {
-  characterDataModel.addDummyData();
-  res.send("dummy data added!")
-}
-
 function createRelationshipCollection (req, res) {
   characterDataModel.createRelationshipCollection();
   res.send("collection made");
 }
 
+function createUserActionCollection (req, res) {
+  try {
+    userActionsModel.createUserActionCollection();
+  } catch(e) {
+    res.send(e);
+  }
+  res.send("Collection made!");
+}
+
+function addDummyCharacterData (req, res) {
+  characterDataModel.addDummyData();
+  res.send("dummy data added!")
+}
+
 function addDummyRelationshipData (req, res) {
   characterDataModel.addDummyRelationshipData();
-  res.send("dummy data added!")
+  res.send("dummy data added!");
+}
+
+function addDummyUserData (req, res) {
+  userActionsModel.addDummyUserData();
+  res.send("dummy data added!");
 }
 
 module.exports = {
   getCharacterData: getCharacterData,
   getRelationshipData: getRelationshipData,
+  getUserData: getUserData,
   getCharacterById: getCharacterById,
   getCharacterByName: getCharacterByName,
   createUser: createUser,
-  addDummyData: addDummyData,
   createCharacterCollection: createCharacterCollection,
-  addDummyRelationshipData: addDummyRelationshipData,
   createRelationshipCollection: createRelationshipCollection,
-  getCharacterRelationships: getCharacterRelationships
+  createUserActionCollection: createUserActionCollection,
+  addDummyCharacterData: addDummyCharacterData,
+  addDummyRelationshipData: addDummyRelationshipData,
+  addDummyUserData: addDummyUserData,
+  getCharacterRelationships: getCharacterRelationships,
+  addUserResponseByQuestionId: addUserResponseByQuestionId,
+  updateUserResponseByQuestionId: updateUserResponseByQuestionId,
+  addUserActionByUserId: addUserActionByUserId,
+  getScoreForUserId: getScoreForUserId
 }

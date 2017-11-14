@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "episodeId": 1,
+    "text": "Do you share explicit details of your dates with friends?",
+    "responses": [
+      {
+        "id": 1,
+        "text": "Yes",
+        "valueName": "Openness"
+      },
+      {
+        "id": 2,
+        "text": "No",
+        "valueName": "Decorum"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "episodeId": 1,
+    "text": "Have you ever eaten a pizza with a fork?",
+    "responses": [
+      {
+        "id": 1,
+        "text": "Yes",
+        "valueName": "Adventurous"
+      },
+      {
+        "id": 2,
+        "text": "No",
+        "valueName": "Stability"
+      }
+    ]
+  }
+]
