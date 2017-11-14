@@ -15,6 +15,7 @@ app.post('/updateUserResponseByQuestionId', Routes.updateUserResponseByQuestionI
 app.post('/addUserActionByUserId', Routes.addUserActionByUserId);
 app.get('/getRelationships', Routes.getRelationshipData);
 app.get('/getUserData', Routes.getUserData);
+app.get('/getUserActionsByUserId', Routes.getUserActionsByUserId);
 app.get('/getCharacters', Routes.getCharacterData);
 app.get('/getCharacterById', Routes.getCharacterById);
 app.get('/getCharacterByName', Routes.getCharacterByName);

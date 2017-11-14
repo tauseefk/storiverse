@@ -139,7 +139,7 @@ function addUserResponseByQuestionId(userId, questionId, responseId) {
             reject(err);
           } else {
             if(data.result.nModified == 0) {
-              var writeError = new Error("Failed to update response!");
+              var writeError = new Error("Failed to add response!");
               writeError.status = 500;
               reject(writeError);
             }
@@ -252,5 +252,6 @@ module.exports = {
   updateUserResponseByQuestionId: updateUserResponseByQuestionId,
   addUserActionForUserId: addUserAction,
   getUserActionCollection: getUserActionCollection,
-  addUserToDatabase: addUserToDatabase
+  addUserToDatabase: addUserToDatabase,
+  getUserActionsByUserId: getUserActionsByUserId
 }

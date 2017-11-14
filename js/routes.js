@@ -102,6 +102,18 @@ function getUserData (req, res) {
 }
 
 /***
+  * Fetch user data for id
+  *
+  */
+function getUserActionsByUserId (req, res) {
+  userActionsModel.getUserActionsByUserId(req.query.id)
+  .then(function(data) {
+    res.send(data);
+  })
+  .catch(console.error.bind(this));
+}
+
+/***
   * Fetch character by name
   *
   */
@@ -287,6 +299,7 @@ module.exports = {
   getCharacterData: getCharacterData,
   getRelationshipData: getRelationshipData,
   getUserData: getUserData,
+  getUserActionsByUserId: getUserActionsByUserId,
   getCharacterById: getCharacterById,
   getCharacterByName: getCharacterByName,
   createUser: createUser,
