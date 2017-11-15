@@ -6,6 +6,19 @@ var fs = require('fs'),
   characterDataModel = require('./Models/characterDataModel.js'),
   commentFile = './data/comments.json';
 
+/***************************************************************
+Only for debugging
+****************************************************************/
+function log(x) {
+  console.log(x);
+  return x;
+}
+
+function logError(x) {
+  console.error(x);
+  return x;
+}
+
 /***
   * Utility to flatten multi dimensional array by one dimension.
   *
@@ -236,62 +249,64 @@ function getScoreForUserId(req, res, next) {
 
 }
 
-/***
-  * Post comments for an item
-  *
-  */
-function postCommentForItemId (req, res) {
-  promisifiedWriteFile(commentFile, req.data.content)
-  .then(function(data) {
-    res.send(JSON.stringify(data));
-  })
-  .catch(console.error.bind(this));
-}
-
-/***
-  * Add user action to the user in the database
-  *
-  */
-function postCommentForItemId2 (req, res) {
-  var comment = {
-    sceneName: req.body.sceneName,
-    interactionType: req.body.interactionType
-  }
-  userActionsModel.addCommentForUserId(req.body.userId, req.body.itemId, userAction);
-  res.send("Comment posted");
-}
-
 function createCharacterCollection (req, res) {
-  characterDataModel.createCharacterCollection();
-  res.send("collection made");
+  characterDataModel.createCharacterCollection()
+  .then(function() {
+    res.send("Collection made!");
+  })
+  .catch(function(e) {
+    res.send(e);
+  });
 }
 
 function createRelationshipCollection (req, res) {
-  characterDataModel.createRelationshipCollection();
-  res.send("collection made");
+  characterDataModel.createRelationshipCollection()
+  .then(function() {
+    res.send("Collection made!");
+  })
+  .catch(function(e) {
+    res.send(e);
+  });
 }
 
 function createUserActionCollection (req, res) {
-  try {
-    userActionsModel.createUserActionCollection();
-  } catch(e) {
+  userActionsModel.createUserActionCollection()
+  .then(function() {
+    res.send("Collection made!");
+  })
+  .catch(function(e) {
     res.send(e);
-  }
-  res.send("Collection made!");
+  });
 }
 
 function addDummyCharacterData (req, res) {
-  characterDataModel.addDummyData();
-  res.send("dummy data added!")
+  characterDataModel.addDummyData()
+  .then(function() {
+    res.send("Collection made!");
+  })
+  .catch(function(e) {
+    res.send(e);
+  });
 }
 
 function addDummyRelationshipData (req, res) {
-  characterDataModel.addDummyRelationshipData();
-  res.send("dummy data added!");
+  characterDataModel.addDummyRelationshipData()
+  .then(function() {
+    res.send("Collection made!");
+  })
+  .catch(function(e) {
+    res.send(e);
+  });
 }
 
 function addDummyUserData (req, res) {
-  userActionsModel.addDummyUserData();
+  userActionsModel.addDummyUserData()
+  .then(function(response) {
+    res.send(response);
+  })
+  .catch(function(e) {
+    next(e);
+  });
   res.send("dummy data added!");
 }
 
@@ -310,7 +325,6 @@ module.exports = {
   addDummyRelationshipData: addDummyRelationshipData,
   addDummyUserData: addDummyUserData,
   getCharacterRelationships: getCharacterRelationships,
-  addUserResponseByQuestionId: addUserResponseByQuestionId,
   updateUserResponseByQuestionId: updateUserResponseByQuestionId,
   addUserActionByUserId: addUserActionByUserId,
   getScoreForUserId: getScoreForUserId

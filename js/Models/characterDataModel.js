@@ -34,6 +34,18 @@ function promisifiedReadFile (url, enc) {
   });
 }
 
+function promisify(callback) {
+  return new Promise(function(resolve, reject) {
+    var ret;
+    try {
+      ret = callback(...args);
+    } catch(e) {
+      throw e;
+    }
+    resolve(ret);
+  });
+}
+
 /***
   * Adds dummy data to the collection for testing purposes.
   *
@@ -152,112 +164,6 @@ function getCharacterById (characterId) {
 }
 
 /***
-  * Update a particular user's actions in the database.
-  * @param userId: id of the userId
-  * @param action: user action to be added
-  *
-  */
-function updateUserActionsByUserId (userId, action) {
-  return databaseConnection.connect()
-  .then(getUserActions)
-  .then(function(collection) {
-    return new Promise(function(resolve, reject) {
-      collection.update(
-        { id: userId},
-        {
-          $push: { actions: action }
-        },
-        {},
-        function(err, result) {
-          if(err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      )
-    });
-  })
-  .catch(logError);
-}
-
-/***
-  * Adds new user action to existing user
-  * @param userId: id of the user for adding user action.
-  * @param action: user action containing name of the scene & interaction type.
-  *
-  */
-function addUserAction (userId, action) {
-  return databaseConnection.connect()
-  .then(getUserActions)
-  .then(function(collection) {
-    return new Promise(function(resolve, reject) {
-      collection.update(
-        { id: userId},
-        {
-          $push: { actions: action }
-        },
-        {},
-        function(err, result) {
-          if(err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    })
-  })
-  .catch(logError);
-}
-
-/***
-  * Adds a new user to the database and returns a UID for the user.
-  *
-  */
-function addUserToDatabase () {
-  return new Promise(function(resolve, reject) {
-    databaseConnection.connect()
-    .then(getUserActions)
-    .then(function(collection) {
-      var generatedUserId = uuidV4();
-      try {
-        collection.insertOne({
-          id: generatedUserId,
-          actions: []
-        });
-      } catch(e) {
-        reject(e);
-      }
-      resolve(generatedUserId);
-    });
-  });
-}
-
-/***
-  * Adds a new user to the database and returns a UID for the user.
-  *
-  */
-function addUserToFile () {
-  return new Promise(function(resolve, reject) {
-    databaseConnection.connect()
-    .then(getUserActions)
-    .then(function(collection) {
-      var generatedUserId = uuidV4();
-      try {
-        collection.insertOne({
-          id: generatedUserId,
-          actions: []
-        });
-      } catch(e) {
-        reject(e);
-      }
-      resolve(generatedUserId);
-    });
-  });
-}
-
-/***
   * Fetches the whole characters collection
   *
   */
@@ -278,8 +184,6 @@ function getRelationshipCollection () {
 module.exports = {
   addDummyData: addDummyData,
   addDummyRelationshipData: addDummyRelationshipData,
-  addUserActionForUserId: addUserAction,
-  addUserToDatabase: addUserToDatabase,
   createCharacterCollection: createCharacterCollection,
   createRelationshipCollection: createRelationshipCollection,
   getCharacterCollection: getCharacterCollection,

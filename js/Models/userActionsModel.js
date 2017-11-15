@@ -43,21 +43,25 @@ function addDummyData() {
   return getUserActionCollection()
   .then(function(collection) {
     var timestamp = new Date().getTime();
-    collection.insertOne( {
-      id: uuidV4(),
-      actions: [
-        {
-          timestamp: timestamp,
-          type: "question",
-          questionId: uuidV4(),
-          responseId: uuidV4()
-        }
-      ]
-    })
-    .then(log)
-    .catch(logError);
-  })
-  .catch(logError);
+    return new Promise(function(resolve, reject) {
+      try {
+        collection.insertOne( {
+          id: uuidV4(),
+          actions: [
+            {
+              timestamp: timestamp,
+              type: "question",
+              questionId: uuidV4(),
+              responseId: uuidV4()
+            }
+          ]
+        });
+      } catch (e) {
+        reject(e);
+      }
+      resolve ("Data added!");
+    });
+  });
 }
 
 /***************************************************************
@@ -105,9 +109,7 @@ function getUserActionsByUserId(userId) {
         }
       });
     });
-  })
-  .then(log)
-  .catch(logError);
+  });
 }
 
 /***
@@ -148,8 +150,7 @@ function addUserResponseByQuestionId(userId, questionId, responseId) {
         }
       )
     });
-  })
-  .catch(logError);
+  });
 }
 
 /***
@@ -166,16 +167,27 @@ function updateUserResponseByQuestionId(userId, questionId, responseId) {
       collection.update(
         { id: userId, "actions.questionId": questionId},
         {
-          $set: { "actions.$.responseId": responseId}
+          $set: {
+            actions: {
+              timestamp: new Date().getTime(),
+              type: "question",
+              questionId: questionId,
+              responseId: responseId
+            }
+          }
         },
-        {},
+        {
+          upsert: true
+        },
         function(err, data) {
           if(err) {
             reject(err);
           } else {
-            if(data.result.nModified == 0) {
+            if(data.result.nModified == 0
+              && !data.result.hasOwnProperty('upserted')) {
               var writeError = new Error("Failed to update response!");
               writeError.status = 500;
+              writeError.data = data;
               reject(writeError);
             }
             resolve(data);
@@ -211,8 +223,7 @@ function addUserAction(userId, action) {
         }
       );
     })
-  })
-  .catch(logError);
+  });
 }
 
 /***
@@ -253,5 +264,6 @@ module.exports = {
   addUserActionForUserId: addUserAction,
   getUserActionCollection: getUserActionCollection,
   addUserToDatabase: addUserToDatabase,
-  getUserActionsByUserId: getUserActionsByUserId
+  getUserActionsByUserId: getUserActionsByUserId,
+  createUserActionCollection: createUserActionCollection
 }
