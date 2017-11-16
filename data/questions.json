@@ -1,35 +1,241 @@
 [
   {
     "id": 1,
-    "episodeId": 1,
-    "text": "Do you share explicit details of your dates with friends?",
+    "content": "Do you share explicit details of your dates with your friends?",
     "responses": [
       {
         "id": 1,
-        "text": "Yes",
-        "valueName": "Openness"
+        "content": "Yes",
+        "value": "Openness"
       },
       {
         "id": 2,
-        "text": "No",
-        "valueName": "Decorum"
+        "content": "No",
+        "value": "Decorum"
       }
     ]
   },
   {
     "id": 2,
-    "episodeId": 1,
-    "text": "Have you ever eaten a pizza with a fork?",
+    "content": "Is it ok to contribute to a conversation you’ve overheard?",
     "responses": [
       {
         "id": 1,
-        "text": "Yes",
-        "valueName": "Adventurous"
+        "content": "Yes",
+        "value": "Openness"
       },
       {
         "id": 2,
-        "text": "No",
-        "valueName": "Stability"
+        "content": "No",
+        "value": "Decorum"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "content": "Would it be fine for someone to sleep with a coworker?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Yes",
+        "value": "Openness"
+      },
+      {
+        "id": 2,
+        "content": "No",
+        "value": "Decorum"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "content": "Is it sketchy to 'Facebook stalk' a potential partner, or is it expected?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Expected",
+        "value": "Openness"
+      },
+      {
+        "id": 2,
+        "content": "Sketchy",
+        "value": "Decorum"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "content": "Is ghosting someone an acceptable way to 'slow fade' from a relationship, or just conflict avoidance?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Acceptable",
+        "value": "Stability"
+      },
+      {
+        "id": 2,
+        "content": "Avoidance",
+        "value": "Courage"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "content": "Do you 'live life out loud', or do you limit what you post on social media?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Live Out Loud",
+        "value": "Openness"
+      },
+      {
+        "id": 2,
+        "content": "Limit Posts",
+        "value": "Decorum"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "content": "Is it ok to publicly blast an ex who disrespected you?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Yes",
+        "value": "Justice"
+      },
+      {
+        "id": 2,
+        "content": "No",
+        "value": "Integrity"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "content": "If an ex showed up at work, would you talk to them or get a coworker to take over for you?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Talk to them",
+        "value": "Courage"
+      },
+      {
+        "id": 2,
+        "content": "Get co-worker",
+        "value": "Stability"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "content": "If you’re planning to break up with your partner for cheating, is it fine to string them along, pretending to make plans for the future?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Yes",
+        "value": "Justice"
+      },
+      {
+        "id": 2,
+        "content": "No",
+        "value": "Integrity"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "content": "If someone in a relationship flirts with you, would you tell their SO or would you not get involved?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Tell SO",
+        "value": "Integrity"
+      },
+      {
+        "id": 2,
+        "content": "Not get involved",
+        "value": "Stability"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "content": "Would you snoop on a partner you were pretty sure was cheating?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Yes",
+        "value": "Justice"
+      },
+      {
+        "id": 2,
+        "content": "No",
+        "value": "Integrity"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "content": "Is it ok to get revenge on an ex who has wronged you?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Yes",
+        "value": "Justice"
+      },
+      {
+        "id": 2,
+        "content": "No",
+        "value": "Integrity"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "content": "Would you follow your dreams even if it was risky?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Yes",
+        "value": "Courage"
+      },
+      {
+        "id": 2,
+        "content": "No",
+        "value": "Stability"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "content": "Would you try to handle a bad date on your own, or would you call for backup?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Handle it",
+        "value": "Courage"
+      },
+      {
+        "id": 2,
+        "content": "Call for backup",
+        "value": "Stability"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "content": "If an acquaintance overstayed their welcome, would you straight up tell them to leave, or hope that they get your hints?",
+    "responses": [
+      {
+        "id": 1,
+        "content": "Tell them to leave",
+        "value": "Courage"
+      },
+      {
+        "id": 2,
+        "content": "Hope they get the hint",
+        "value": "Stability"
       }
     ]
   }
