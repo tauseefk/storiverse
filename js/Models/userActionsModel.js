@@ -51,8 +51,8 @@ function addDummyData() {
             {
               timestamp: timestamp,
               type: "question",
-              questionId: uuidV4(),
-              responseId: uuidV4()
+              questionId: 1,
+              responseId: 2
             }
           ]
         });
@@ -136,7 +136,7 @@ function addUserResponseByQuestionId(userId, questionId, responseId) {
           }
         },
         {},
-        function(err, result) {
+        function(err, data) {
           if(err) {
             reject(err);
           } else {
@@ -168,12 +168,7 @@ function updateUserResponseByQuestionId(userId, questionId, responseId) {
         { id: userId, "actions.questionId": questionId},
         {
           $set: {
-            actions: {
-              timestamp: new Date().getTime(),
-              type: "question",
-              questionId: questionId,
-              responseId: responseId
-            }
+            "actions.$.responseId": responseId
           }
         },
         {

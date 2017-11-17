@@ -237,16 +237,38 @@ function updateUserResponseByQuestionId (req, res, next) {
     res.send(data);
   })
   .catch(function(e) {
-    next(e);
+    res.send(e);
   })
 }
 
 function addUserActionByUserId (req, res, next) {
-  res.send("blah");
+
 }
 
 function getScoreForUserId(req, res, next) {
-
+  userActionsModel.getUserActionsByUserId(req.query.id)
+  .then(function(userActions) {
+    return userActions.map(function(userAction){
+      return userAction.actions.map(function(action){
+        return {
+          questionId: action.questionId,
+          responseId: action.responseId
+        };
+      });
+    })
+    .concatAll();
+  })
+  .then(function(filteredActions) {
+    var things = filteredActions.map(function(filteredAction) {
+      return characterDataModel.getValueForResponse(filteredAction.questionId,
+        filteredAction.responseId);
+    });
+    return Promise.all(things);
+  })
+  .then(function(values) {
+    res.send(JSON.stringify(values.concatAll()));
+  })
+  .catch(logError);
 }
 
 function createCharacterCollection (req, res) {
@@ -299,6 +321,16 @@ function addDummyRelationshipData (req, res) {
   });
 }
 
+function addDummyQuestionsData (req, res) {
+  characterDataModel.addDummyQuestionsData()
+  .then(function() {
+    res.send("Collection made!");
+  })
+  .catch(function(e) {
+    res.send(e);
+  });
+}
+
 function addDummyUserData (req, res) {
   userActionsModel.addDummyUserData()
   .then(function(response) {
@@ -308,6 +340,15 @@ function addDummyUserData (req, res) {
     next(e);
   });
   res.send("dummy data added!");
+}
+
+function getQuestionsData(req, res) {
+  characterDataModel.getQuestionsCollection()
+  .then(collectionToArray)
+  .then(function(questions) {
+    res.send(questions);
+  })
+  .catch(logError);
 }
 
 module.exports = {
@@ -325,7 +366,10 @@ module.exports = {
   addDummyRelationshipData: addDummyRelationshipData,
   addDummyUserData: addDummyUserData,
   getCharacterRelationships: getCharacterRelationships,
+  addUserResponseByQuestionId: addUserResponseByQuestionId,
   updateUserResponseByQuestionId: updateUserResponseByQuestionId,
   addUserActionByUserId: addUserActionByUserId,
-  getScoreForUserId: getScoreForUserId
+  getScoreForUserId: getScoreForUserId,
+  addDummyQuestionsData: addDummyQuestionsData,
+  getQuestionsData: getQuestionsData
 }

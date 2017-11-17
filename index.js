@@ -10,11 +10,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/', express.static(__dirname));
 
-// app.post('/addUserResponseByQuestionId', Routes.addUserResponseByQuestionId);
+app.post('/addUserResponseByQuestionId', Routes.addUserResponseByQuestionId);
 app.post('/updateUserResponseByQuestionId', Routes.updateUserResponseByQuestionId);
 app.post('/addUserActionByUserId', Routes.addUserActionByUserId);
 app.get('/getRelationships', Routes.getRelationshipData);
+app.get('/createUserActionCollection', Routes.createUserActionCollection);
 app.get('/getUserData', Routes.getUserData);
+app.get('/getQuestionsData', Routes.getQuestionsData);
 app.get('/getUserActionsByUserId', Routes.getUserActionsByUserId);
 app.get('/getCharacters', Routes.getCharacterData);
 app.get('/getCharacterById', Routes.getCharacterById);
@@ -24,9 +26,11 @@ app.get('/createCharacterCollection', Routes.createCharacterCollection);
 app.get('/addDummyCharacterData', Routes.addDummyCharacterData);
 app.get('/addDummyRelationshipData', Routes.addDummyRelationshipData);
 app.get('/addDummyUserData', Routes.addDummyUserData);
+app.get('/addDummyQuestionsData', Routes.addDummyQuestionsData);
 app.get('/createRelationshipCollection', Routes.createRelationshipCollection);
 app.get('/getCharacterRelationships', Routes.getCharacterRelationships);
 app.get('/getScoreForUserId', Routes.getScoreForUserId);
+
 
 
 app.get('*', function(req, res, next) {

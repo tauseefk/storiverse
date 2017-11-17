@@ -7,6 +7,7 @@ var databaseConnection = require('./databaseConnection.js'),
   uuidV4 = require('uuid/v4'),
   getCharacterData = getCollectionByName('characterData'),
   getRelationshipData = getCollectionByName('relationshipData'),
+  getQuestionsData = getCollectionByName('questionsData'),
   fs = require('fs');
 
 /***************************************************************
@@ -81,6 +82,21 @@ function addDummyRelationshipData () {
       });
     })
     .then(log)
+    .catch(logError);
+  })
+  .catch(logError);
+}
+
+function addDummyQuestionsData () {
+  return Promise.resolve()
+  .then(getQuestionsCollection)
+  .then(function(collection) {
+    promisifiedReadFile('./data/questions.json', 'utf8')
+    .then(function(data) {
+      JSON.parse(data).forEach(function(question){
+        return collection.insertOne(question);
+      });
+    })
     .catch(logError);
   })
   .catch(logError);
@@ -181,6 +197,39 @@ function getRelationshipCollection () {
   .then(getRelationshipData);
 }
 
+function getQuestionsCollection () {
+  return databaseConnection.connect()
+  .then(getQuestionsData);
+}
+
+function getValueForResponse(questionId, responseId) {
+  return getQuestionsCollection()
+  .then(function(collection){
+    return new Promise(function(resolve, reject) {
+      collection.find({
+        "id": parseInt(questionId)
+      })
+      .toArray(function(err, items) {
+        if(err) {
+          reject(err);
+        } else {
+          var values = items.map(function(item) {
+            return item.responses.filter(function(response) {
+              return response.id == responseId;
+            })
+            .map(function(response) {
+              return response.value;
+            });
+          })
+          .concatAll();
+          console.log(values);
+          resolve(values);
+        }
+      })
+    })
+  })
+}
+
 module.exports = {
   addDummyData: addDummyData,
   addDummyRelationshipData: addDummyRelationshipData,
@@ -188,5 +237,8 @@ module.exports = {
   createRelationshipCollection: createRelationshipCollection,
   getCharacterCollection: getCharacterCollection,
   getRelationshipCollection: getRelationshipCollection,
-  getCharacterById: getCharacterById
+  getCharacterById: getCharacterById,
+  getValueForResponse: getValueForResponse,
+  addDummyQuestionsData: addDummyQuestionsData,
+  getQuestionsCollection: getQuestionsCollection
 }
