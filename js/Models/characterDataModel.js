@@ -120,10 +120,8 @@ function createCharacterCollection () {
 function createRelationshipCollection () {
   return Promise.resolve()
   .then(getRelationshipCollection)
-  .then(log)
   .catch(function(e) {
     console.log(e);
-
     db.createCollection("relationshipData", {
       capped : true,
       size : 5242880,
