@@ -4,6 +4,7 @@ Author: Md Tauseef
 ****************************************************************/
 
 var databaseConnection = require('./databaseConnection.js'),
+  connection = databaseConnection.connect(),
   uuidV4 = require('uuid/v4'),
   getCharacterData = getCollectionByName('characterData'),
   getRelationshipData = getCollectionByName('relationshipData'),
@@ -178,7 +179,7 @@ function getCharacterById (characterId) {
   *
   */
 function getCharacterCollection () {
-  return databaseConnection.connect()
+  return connection
   .then(getCharacterData);
 }
 
@@ -187,12 +188,12 @@ function getCharacterCollection () {
   *
   */
 function getRelationshipCollection () {
-  return databaseConnection.connect()
+  return connection
   .then(getRelationshipData);
 }
 
 function getQuestionsCollection () {
-  return databaseConnection.connect()
+  return connection
   .then(getQuestionsData);
 }
 
