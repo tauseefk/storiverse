@@ -145,6 +145,7 @@ function addUserResponseByQuestionId(userId, questionId, responseId) {
               writeError.status = 500;
               reject(writeError);
             }
+            console.log("added response!");
             resolve(data);
           }
         }
@@ -185,6 +186,7 @@ function updateUserResponseByQuestionId(userId, questionId, responseId) {
               writeError.data = data;
               reject(writeError);
             }
+            console.log("updated response!");
             resolve(data);
           }
         }

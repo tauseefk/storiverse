@@ -10,7 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/', express.static(__dirname));
 
-app.post('/addUserResponseByQuestionId', Routes.addUserResponseByQuestionId);
+// app.post('/addUserResponseByQuestionId', Routes.addUserResponseByQuestionId);
 app.post('/updateUserResponseByQuestionId', Routes.updateUserResponseByQuestionId);
 app.post('/addUserActionByUserId', Routes.addUserActionByUserId);
 app.get('/getRelationships', Routes.getRelationshipData);

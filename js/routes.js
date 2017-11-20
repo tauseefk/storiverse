@@ -228,29 +228,40 @@ function updateUserResponseByQuestionId (req, res, next) {
     questionId: req.body.questionId,
     responseId: req.body.responseId
   }
-  userActionsModel.updateUserResponseByQuestionId(
-    req.body.id,
-    req.body.questionId,
-    req.body.responseId
-  )
-  .then(function(data) {
-    res.send(data);
+  userActionsModel.getUserActionsByUserId(req.body.id)
+  .then(function(userActions){
+    return userActions.map(function(userAction) {
+      return userAction.actions;
+    })
+    .concatAll()
   })
-  .catch(function(e) {
-    if(data.name == "MongoError") {
+  .then(log)
+  .then(function(userActions){
+    return userActions.filter(function(userAction) {
+      return userAction.questionId == req.body.questionId;
+    })
+  })
+  .then(log)
+  .then(function(filteredActions) {
+    if(filteredActions.length > 0) {
+      return userActionsModel.updateUserResponseByQuestionId(
+        req.body.id,
+        req.body.questionId,
+        req.body.responseId
+      );
+    } else {
       return userActionsModel.addUserResponseByQuestionId(
         req.body.id,
         req.body.questionId,
         req.body.responseId
-      ).then(function(data) {
-        res.send(data);
-      })
-      .catch(function (e){
-        next(e);
-      });
-    } else {
-      next(e);
+      )
     }
+  })
+  .then(function(data) {
+    res.send(data);
+  })
+  .catch(function(e) {
+    next(e);
   })
 }
 
