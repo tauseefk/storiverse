@@ -24,6 +24,9 @@ function createUserActionCollection () {
   return Promise.resolve()
   .then(getUserActionCollection)
   .then(log)
+  .then(function(collection) {
+    collection.drop()
+  })
   .catch(function(e) {
     console.log(e);
 
