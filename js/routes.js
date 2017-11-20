@@ -235,13 +235,11 @@ function updateUserResponseByQuestionId (req, res, next) {
     })
     .concatAll()
   })
-  .then(log)
   .then(function(userActions){
     return userActions.filter(function(userAction) {
       return userAction.questionId == req.body.questionId;
     })
   })
-  .then(log)
   .then(function(filteredActions) {
     if(filteredActions.length > 0) {
       return userActionsModel.updateUserResponseByQuestionId(
@@ -308,7 +306,7 @@ function createCharacterCollection (req, res) {
 function createRelationshipCollection (req, res) {
   characterDataModel.createRelationshipCollection()
   .then(function() {
-    res.send("Collection made!");
+    res.send("Relationship Collection made!");
   })
   .catch(function(e) {
     res.send(e);

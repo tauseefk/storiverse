@@ -105,10 +105,7 @@ function addDummyQuestionsData () {
 function createCharacterCollection () {
   return Promise.resolve()
   .then(getCharacterCollection)
-  .then(log)
   .catch(function(e) {
-    console.log(e);
-
     db.createCollection("characterData", {
       capped : true,
       size : 5242880,
@@ -121,7 +118,6 @@ function createRelationshipCollection () {
   return Promise.resolve()
   .then(getRelationshipCollection)
   .catch(function(e) {
-    console.log(e);
     db.createCollection("relationshipData", {
       capped : true,
       size : 5242880,
