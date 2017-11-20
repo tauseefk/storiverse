@@ -237,7 +237,20 @@ function updateUserResponseByQuestionId (req, res, next) {
     res.send(data);
   })
   .catch(function(e) {
-    res.send(e);
+    if(data.name == "MongoError") {
+      return userActionsModel.addUserResponseByQuestionId(
+        req.body.id,
+        req.body.questionId,
+        req.body.responseId
+      ).then(function(data) {
+        res.send(data);
+      })
+      .catch(function (e){
+        next(e);
+      });
+    } else {
+      next(e);
+    }
   })
 }
 
