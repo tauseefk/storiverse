@@ -256,11 +256,18 @@ function updateUserResponseByQuestionId (req, res, next) {
     }
   })
   .then(function(data) {
-    res.send(data);
+    return characterDataModel.getValueForResponse(
+      req.body.questionId,
+      req.body.responseId
+    );
+  })
+  .then(function(value) {
+    value = value[0] || value;
+    res.send(value);
   })
   .catch(function(e) {
     next(e);
-  })
+  });
 }
 
 function addUserActionByUserId (req, res, next) {

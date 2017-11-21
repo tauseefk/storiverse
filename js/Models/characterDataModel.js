@@ -220,12 +220,11 @@ function getValueForResponse(questionId, responseId) {
             });
           })
           .concatAll();
-          console.log(values);
           resolve(values);
         }
       })
-    })
-  })
+    });
+  });
 }
 
 module.exports = {
