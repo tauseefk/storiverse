@@ -6,8 +6,7 @@ Author: Md Tauseef
 // XXX:TODO reuse collections instead of fetching every time
 // XXX:TODO create connection pools
 
-var databaseConnection = require('./databaseConnection.js'),
-  connection = databaseConnection.connect(),
+var connection = require('./databaseConnection.js'),
   uuidV4 = require('uuid/v4'),
   getCharacterData = getCollectionByName('characterData'),
   getRelationshipData = getCollectionByName('relationshipData'),

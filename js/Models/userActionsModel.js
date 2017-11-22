@@ -3,8 +3,7 @@ Data access layer for user actions.
 Author: Md Tauseef
 ****************************************************************/
 
-var databaseConnection = require('./databaseConnection.js');
-var connection = databaseConnection.connect();
+var connection = require('./databaseConnection.js');
 var uuidV4 = require('uuid/v4');
 var getUserActions = getCollectionByName('userActionData');
 var userActionCollection = null;
