@@ -4,8 +4,10 @@ Author: Md Tauseef
 ****************************************************************/
 
 var databaseConnection = require('./databaseConnection.js');
+var connection = databaseConnection.connect();
 var uuidV4 = require('uuid/v4');
 var getUserActions = getCollectionByName('userActionData');
+var userActionCollection = null;
 
 /***************************************************************
 Only for debugging
@@ -251,8 +253,11 @@ function addUserToDatabase () {
   *
   */
 function getUserActionCollection() {
-  return databaseConnection.connect()
-  .then(getUserActions);
+  if(userActionCollection == null){
+    userActionCollection = connection
+    .then(getUserActions);
+  }
+  return userActionCollection;
 }
 
 module.exports = {

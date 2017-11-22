@@ -12,6 +12,9 @@ var databaseConnection = require('./databaseConnection.js'),
   getCharacterData = getCollectionByName('characterData'),
   getRelationshipData = getCollectionByName('relationshipData'),
   getQuestionsData = getCollectionByName('questionsData'),
+  characterCollection = null,
+  relationshipCollection = null,
+  questionsCollection = null,
   fs = require('fs');
 
 /***************************************************************
@@ -177,29 +180,6 @@ function getCharacterById (characterId) {
   })
 }
 
-/***
-  * Fetches the whole characters collection
-  *
-  */
-function getCharacterCollection () {
-  return connection
-  .then(getCharacterData);
-}
-
-/***
-  * Fetches the whole relationships collection
-  *
-  */
-function getRelationshipCollection () {
-  return connection
-  .then(getRelationshipData);
-}
-
-function getQuestionsCollection () {
-  return connection
-  .then(getQuestionsData);
-}
-
 function getValueForResponse(questionId, responseId) {
   return getQuestionsCollection()
   .then(function(collection){
@@ -225,6 +205,38 @@ function getValueForResponse(questionId, responseId) {
       })
     });
   });
+}
+
+/***
+  * Fetches the whole characters collection
+  *
+  */
+function getCharacterCollection () {
+  if(characterCollection == null) {
+    characterCollection = connection
+    .then(getCharacterData);
+  }
+  return characterCollection;
+}
+
+/***
+  * Fetches the whole relationships collection
+  *
+  */
+function getRelationshipCollection () {
+  if(relationshipCollection == null) {
+    relationshipCollection = connection
+    .then(getRelationshipData);
+  }
+  return relationshipCollection;
+}
+
+function getQuestionsCollection () {
+  if(questionsCollection == null) {
+    questionsCollection = connection
+    .then(getQuestionsData);
+  }
+  return questionsCollection;
 }
 
 module.exports = {
