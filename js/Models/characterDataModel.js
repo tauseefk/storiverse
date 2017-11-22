@@ -3,9 +3,6 @@ Data access layer for user actions.
 Author: Md Tauseef
 ****************************************************************/
 
-// XXX:TODO reuse collections instead of fetching every time
-// XXX:TODO create connection pools
-
 var connection = require('./databaseConnection.js'),
   uuidV4 = require('uuid/v4'),
   getCharacterData = getCollectionByName('characterData'),

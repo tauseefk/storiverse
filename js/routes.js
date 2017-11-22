@@ -201,7 +201,6 @@ function createUser (req, res) {
   .catch(console.error.bind(this));
 }
 
-// TODO:XXX
 function addUserResponseByQuestionId (req, res, next) {
   var requestObj = {
     userId: req.body.id,
@@ -221,7 +220,6 @@ function addUserResponseByQuestionId (req, res, next) {
   })
 }
 
-// TODO:XXX
 function updateUserResponseByQuestionId (req, res, next) {
   var requestObj = {
     userId: req.body.id,
