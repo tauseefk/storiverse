@@ -50,7 +50,7 @@
     "currentStatus": "",
     "img": "",
     "labels": [""],
-    "relationships": [1, 6],
+    "relationships": [1, 7, 8],
     "firstAppearedEpisode": 1
   },
   {
@@ -61,7 +61,7 @@
     "currentStatus": "",
     "img": "",
     "labels": [""],
-    "relationships": [1, 2, 3, 5],
+    "relationships": [1, 2, 3],
     "firstAppearedEpisode": 1
   },
   {

@@ -1,0 +1,13 @@
+[Unit]
+Description=Env variables for running the database
+Documentation=https://example.com
+After=network.target
+
+[Service]
+Type=simple
+User=mdtausee
+ExecStart=/usr/bin/mongod -dbpath /home/mdtausee/storiverse-data
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

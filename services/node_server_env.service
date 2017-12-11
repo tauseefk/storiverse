@@ -1,0 +1,14 @@
+[Unit]
+Description=Env variables for the application server
+Documentation=https://example.com
+After=network.target
+
+[Service]
+Environment=NODE_PORT=3000
+Type=simple
+User=mdtausee
+ExecStart=/usr/bin/node /srv/www/nodejs/storiverse/app_server/index.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

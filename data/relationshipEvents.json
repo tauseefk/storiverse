@@ -287,7 +287,7 @@
   {
     "id": 16,
     "eventContent": "Date",
-    "characterIds": [7, 9, 10],
+    "characterIds": [7, 9],
     "relationshipType": 5,
     "strength": 1,
     "description": "Libby suggests that she and Peter spend New Year’s in San Francisco, while Peter gets an angry text from Rachel.",
